@@ -1,5 +1,6 @@
 # dckr: A docker wrapper
 
+```
 Usage: ./dckr <command> [-p <profile>] [-i <image>] [-n <name>] [-k <key>] <container_commands>
 Commands:
   run: Run a container command on an docker image
@@ -14,3 +15,4 @@ Options:
   -n <name>: Specify container name for non-singlton container (default: none)
   -h: Create mounts for /home (default: false)
   -d: Print command line without executing (dry run)
+  ```
