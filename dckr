@@ -1,0 +1,148 @@
+#!/bin/sh
+
+# Usage: $0 <command> [-i <image>] [-p <file>] [-k <key>] [-n <name>] [-h] [-d] <container_commands ...>
+
+if [ $# -le 0 ]
+then
+    echo "Usage: $0 <command> [-p <profile>] [-i <image>] [-n <name>] [-k <key>] <container_commands>"
+    echo "Commands:"
+    echo "  run: Run a container command on an docker image"
+    echo "  up: Create a singleton container and associate with a key"
+    echo "  down: Remove a singleton container associated with a key"
+    echo "  exec: Execute commands on singleton container associated with key"
+    echo "  ps: Show all running containers"
+    echo "Options:"
+    echo "  -i <image>: Docker image"
+    echo "  -p <file>: Profile file (default: '${DOCKER_PROFILE}')"
+    echo "  -k <key>: Singleton key (Required only for up/down/exec commands)"
+    echo "  -n <name>: Specify container name for non-singlton container (default: none)"
+    echo "  -h: Create mounts for /home (default: false)"
+    echo "  -d: Print command line without executing (dry run)"
+    exit 1
+fi
+
+DOCKER_CMD="docker"
+DOCKER_OPTIONS=""
+DOCKER_COMMAND_OPTIONS=""
+SINGLETON_KEY="NA"
+PROFILE=${DOCKER_PROFILE}
+HOME=0
+DRY=0
+COMMAND=$1
+shift
+
+while getopts "p:i:k:n:dh" OPT
+do
+  case $OPT in
+    p) PROFILE=$OPTARG
+      ;;
+    i) IMAGE=$OPTARG
+      ;;
+    k) SINGLETON_KEY=${USER}_${OPTARG}
+      ;;
+    n) NAME=$OPTARG
+      ;;
+    d) DRY=1
+      ;;
+    h) HOME=1
+      ;;
+  esac
+done
+
+echo ==================================================================
+echo "# dckr command:" $COMMAND
+
+shift $((OPTIND-1))
+CONTAINER_COMMAND=$@
+
+DOCKER_RUN_OPTS="-v /etc/passwd:/etc/passwd -v /etc/shadow:/etc/shadow -v /etc/group:/etc/group -u ${USER}"
+DOCKER_EXEC_OPTS="-it"
+
+if [[ $HOME == 1 ]]
+then
+    DOCKER_RUN_OPTS="${DOCKER_RUN_OPTS} -v /home:/home"
+fi
+
+# DOCKER_RUN_USER_OPTS can be defined in a profile file
+DOCKER_RUN_USER_OPTS=
+if [[ ${PROFILE} != "" ]]
+then
+    echo \# profile: ${PROFILE}
+    . ${PROFILE}
+fi
+
+SINGLETON_COMMAND="/bin/sh -c \"while true; do ping 8.8.8.8; done\""
+
+basic_command() {
+    CMD=$1
+    echo "#" $CMD
+    echo ==================================================================
+    if [[ $DRY == 1 ]]; then exit 0; fi
+    eval $CMD
+}
+
+singleton_up(){
+  if [[ ${SINGLETON_KEY} == "NA" ]]
+  then
+    echo "Error: singleton_key not defined, use the -k parameter"
+    exit 1
+  fi
+  CMD="${DOCKER_CMD} run --name ${SINGLETON_KEY} -d ${DOCKER_RUN_OPTS} ${DOCKER_RUN_USER_OPTS} $IMAGE $SINGLETON_COMMAND"
+  basic_command "$CMD"
+}
+
+singleton_down(){
+  if [[ ${SINGLETON_KEY} == "NA" ]]
+  then
+    echo "Error: singleton_key not defined, use the -k parameter"
+    exit 1
+  fi
+  basic_command "${DOCKER_CMD} stop ${SINGLETON_KEY}"
+  basic_command "${DOCKER_CMD} rm ${SINGLETON_KEY}"
+}
+
+singleton_exec(){
+  if [[ ${SINGLETON_KEY} == "NA" ]]
+  then
+    echo "Error: singleton_key not defined, use the -k parameter"
+    exit 1
+  fi
+  CMD="${DOCKER_CMD} exec ${DOCKER_EXEC_OPTS} ${SINGLETON_KEY} ${CONTAINER_COMMAND}"
+  basic_command "$CMD"
+}
+
+run(){
+  if [[ ${NAME} != "" ]]
+  then
+      NAME="--name ${NAME}"
+  fi
+  CMD="${DOCKER_CMD} run ${NAME} --rm ${DOCKER_EXEC_OPTS} ${DOCKER_RUN_OPTS} ${DOCKER_RUN_USER_OPTS} $IMAGE ${CONTAINER_COMMAND}"
+  basic_command "$CMD"
+}
+
+ps(){
+  CMD="${DOCKER_CMD} ps"
+  basic_command "$CMD"
+}
+
+case $COMMAND in
+  up)
+    singleton_up
+    ;;
+  down)
+    singleton_down
+    ;;
+  exec)
+    singleton_exec
+    ;;
+  run)
+    run
+    ;;
+  ps)
+    ps
+    ;;
+    *)
+    echo "unknown command: $COMMAND"
+    exit 1
+    ;;
+esac
