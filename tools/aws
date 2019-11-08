@@ -1,0 +1,1 @@
+dckr run -i mesosphere/aws-cli -p dckr_biohub_aws $@

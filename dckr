@@ -1,6 +1,7 @@
 #!/bin/sh
 
-# Usage: $0 <command> [-i <image>] [-p <file>] [-k <key>] [-n <name>] [-h] [-d] <container_commands ...>
+DOCKER_PROFILE_DIR=${DOCKER_PROFILE_DIR:-/etc/docker/profiles}
+DOCKER_PROFILE=${DOCKER_PROFILE:-dckr_base}
 
 if [ $# -le 0 ]
 then
@@ -13,10 +14,9 @@ then
     echo "  ps: Show all running containers"
     echo "Options:"
     echo "  -i <image>: Docker image"
-    echo "  -p <file>: Profile file (default: '${DOCKER_PROFILE}')"
-    echo "  -k <key>: Singleton key (Required only for up/down/exec commands)"
+    echo "  -p <file>: Profile (default: '${DOCKER_PROFILE_DIR}/${DOCKER_PROFILE}')"
+    echo "  -k <key>: Singleton key (Required for up/down/exec commands)"
     echo "  -n <name>: Specify container name for non-singlton container (default: none)"
-    echo "  -h: Create mounts for /home (default: false)"
     echo "  -d: Print command line without executing (dry run)"
     exit 1
 fi
@@ -26,10 +26,11 @@ DOCKER_OPTIONS=""
 DOCKER_COMMAND_OPTIONS=""
 SINGLETON_KEY="NA"
 PROFILE=${DOCKER_PROFILE}
-HOME=0
 DRY=0
 COMMAND=$1
 shift
+
+RUSER=${SUDO_USER:-${USER}}
 
 while getopts "p:i:k:n:dh" OPT
 do
@@ -38,13 +39,11 @@ do
       ;;
     i) IMAGE=$OPTARG
       ;;
-    k) SINGLETON_KEY=${USER}_${OPTARG}
+    k) SINGLETON_KEY=${RUSER}_${OPTARG}
       ;;
     n) NAME=$OPTARG
       ;;
     d) DRY=1
-      ;;
-    h) HOME=1
       ;;
   esac
 done
@@ -55,20 +54,15 @@ echo "# dckr command:" $COMMAND
 shift $((OPTIND-1))
 CONTAINER_COMMAND=$@
 
-DOCKER_RUN_OPTS="-v /etc/passwd:/etc/passwd -v /etc/shadow:/etc/shadow -v /etc/group:/etc/group -u ${USER}"
+DOCKER_RUN_OPTS="-w /home/${RUSER} -v /etc/passwd:/etc/passwd -v /etc/shadow:/etc/shadow -v /etc/group:/etc/group -u ${RUSER}"
 DOCKER_EXEC_OPTS="-it"
-
-if [[ $HOME == 1 ]]
-then
-    DOCKER_RUN_OPTS="${DOCKER_RUN_OPTS} -v /home:/home"
-fi
 
 # DOCKER_RUN_USER_OPTS can be defined in a profile file
 DOCKER_RUN_USER_OPTS=
 if [[ ${PROFILE} != "" ]]
 then
-    echo \# profile: ${PROFILE}
-    . ${PROFILE}
+    echo \# profile: ${DOCKER_PROFILE_DIR}/${PROFILE}
+    . ${DOCKER_PROFILE_DIR}/${PROFILE}
 fi
 
 SINGLETON_COMMAND="/bin/sh -c \"while true; do ping 8.8.8.8; done\""
