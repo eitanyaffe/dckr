@@ -1,7 +1,7 @@
 # dckr: A docker wrapper
 
 ```
-Usage: ./dckr <command> [-p <profile>] [-i <image>] [-n <name>] [-k <key>] <container_commands>
+Usage: /usr/bin/dckr <command> [-p <profile>] [-i <image>] [-n <name>] [-k <key>] <container_commands>
 Commands:
   run: Run a container command on an docker image
   up: Create a singleton container and associate with a key
@@ -10,12 +10,11 @@ Commands:
   ps: Show all running containers
 Options:
   -i <image>: Docker image
-  -p <file>: Profile file (default: '')
-  -k <key>: Singleton key (Required only for up/down/exec commands)
+  -p <file>: Profile (default: '/etc/docker/profiles/dckr_base')
+  -k <key>: Singleton key (Required for up/down/exec commands)
   -n <name>: Specify container name for non-singlton container (default: none)
-  -h: Create mounts for /home (default: false)
   -d: Print command line without executing (dry run)
-  ```
+```
 
 ## Insallation
 
