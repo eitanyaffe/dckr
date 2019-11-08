@@ -1,15 +1,3 @@
-<<<<<<< HEAD
-# dckr
-
-1. Run make install.
-
-2. Add /etc/docker/tools to your path.
-
-3. Add to the end of /etc/sudoers this line:
-ALL	ALL=(ALL) NOPASSWD: /usr/bin/dckr
-
-4. See examples in /etc/docker/tools.
-=======
 # dckr: A docker wrapper
 
 ```
@@ -28,4 +16,14 @@ Options:
   -h: Create mounts for /home (default: false)
   -d: Print command line without executing (dry run)
   ```
->>>>>>> e4d6216581fe3c95cd01e7cb429865c5a46adfe2
+
+## Insallation
+
+1. Run make install.
+
+2. Add /etc/docker/tools to your path.
+
+3. Add to the end of /etc/sudoers this line:
+ALL	ALL=(ALL) NOPASSWD: /usr/bin/dckr
+
+4. See examples in /etc/docker/tools.
