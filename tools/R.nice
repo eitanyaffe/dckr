@@ -1,1 +1,0 @@
-sudo dckr exec -k R nice R $@

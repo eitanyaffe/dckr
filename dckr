@@ -32,6 +32,11 @@ shift
 
 RUSER=${SUDO_USER:-${USER}}
 
+# get nice value of parent
+PRIO_VALUE=$(awk '{print $18}' /proc/$$/stat)
+NICE_VALUE=$((PRIO_VALUE-20))
+NICE="nice -n ${NICE_VALUE}"
+
 while getopts "p:i:k:n:dh" OPT
 do
   case $OPT in
@@ -81,7 +86,7 @@ singleton_up(){
     echo "Error: singleton_key not defined, use the -k parameter"
     exit 1
   fi
-  CMD="${DOCKER_CMD} run --name ${SINGLETON_KEY} -d ${DOCKER_RUN_OPTS} ${DOCKER_RUN_USER_OPTS} $IMAGE $SINGLETON_COMMAND"
+  CMD="${DOCKER_CMD} run --name ${SINGLETON_KEY} -d ${DOCKER_RUN_OPTS} ${DOCKER_RUN_USER_OPTS} $IMAGE ${NICE} ${SINGLETON_COMMAND}"
   basic_command "$CMD"
 }
 
@@ -101,7 +106,7 @@ singleton_exec(){
     echo "Error: singleton_key not defined, use the -k parameter"
     exit 1
   fi
-  CMD="${DOCKER_CMD} exec ${DOCKER_EXEC_OPTS} ${SINGLETON_KEY} ${CONTAINER_COMMAND}"
+  CMD="${DOCKER_CMD} exec ${DOCKER_EXEC_OPTS} ${SINGLETON_KEY} ${NICE} ${CONTAINER_COMMAND}"
   basic_command "$CMD"
 }
 
@@ -110,7 +115,7 @@ run(){
   then
       NAME="--name ${NAME}"
   fi
-  CMD="${DOCKER_CMD} run ${NAME} --rm ${DOCKER_EXEC_OPTS} ${DOCKER_RUN_OPTS} ${DOCKER_RUN_USER_OPTS} $IMAGE ${CONTAINER_COMMAND}"
+  CMD="${DOCKER_CMD} run ${NAME} --rm ${DOCKER_EXEC_OPTS} ${DOCKER_RUN_OPTS} ${DOCKER_RUN_USER_OPTS} $IMAGE ${NICE} ${CONTAINER_COMMAND}"
   basic_command "$CMD"
 }
 
