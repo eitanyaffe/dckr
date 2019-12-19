@@ -14,6 +14,7 @@ then
     echo "  ps: Show all running containers"
     echo "Options:"
     echo "  -i <image>: Docker image"
+    echo "  -r <path>: Profile directory (default: '${DOCKER_PROFILE_DIR}')"
     echo "  -p <file>: Profile (default: '${DOCKER_PROFILE_DIR}/${DOCKER_PROFILE}')"
     echo "  -k <key>: Singleton key (Required for up/down/exec commands)"
     echo "  -n <name>: Specify container name for non-singlton container (default: none)"
@@ -37,7 +38,7 @@ PRIO_VALUE=$(awk '{print $18}' /proc/$$/stat)
 NICE_VALUE=$((PRIO_VALUE-20))
 NICE="nice -n ${NICE_VALUE}"
 
-while getopts "p:i:k:n:dh" OPT
+while getopts "p:i:k:n:r:dh" OPT
 do
   case $OPT in
     p) PROFILE=$OPTARG
@@ -47,6 +48,8 @@ do
     k) SINGLETON_KEY=${RUSER}_${OPTARG}
       ;;
     n) NAME=$OPTARG
+      ;;
+    r) DOCKER_PROFILE_DIR=$OPTARG
       ;;
     d) DRY=1
       ;;
