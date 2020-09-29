@@ -1,6 +1,6 @@
 # dr: A docker wrapper
 
-This script calls docker in order to spin up a container with a user-specified image, mounting
+This helper script calls docker in order to spin up a container with a user-specified image, mounting
 user-defined volumes, and calling a specific container command. 
 
 dr has two commands or flavors. The ```run``` command
