@@ -28,7 +28,7 @@ Options:
 
 ## Installation
 
-1. Run ```make install```.
+1. Run ```sudo make install```.
 
 2. Add ```/etc/docker/tools``` to your path.
 
@@ -43,8 +43,7 @@ using the profile parameter. The default profile is dr_base, which contains:
 DOCKER_RUN_USER_OPTS="-v /relman01:/relman01 -v /relman02:/relman02 -v /relman03:/relman03 -v /relman04:/relman04 -v /home:/home"
 ```
 
-
-## Examples
+## dr commands
 
 ### The execute command
 
@@ -62,4 +61,7 @@ DOCKER_RUN_USER_OPTS="-v /relman01:/relman01 -v /relman02:/relman02 -v /relman03
 Execute the bash script x.sh within an ubuntu container:
 ```sudo dr run -i ubuntu x.sh```
 
-See some more examples in ```/etc/docker/tools```.
+## Tools
+
+The ```/etc/docker/tools``` contains bash scripts that serve as
+aliases for dr commands. See files there.
