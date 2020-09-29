@@ -1,5 +1,10 @@
 # dr: A docker wrapper
 
+This script uses docker to spin up a container with a user-specified image, mounts
+user-defined volumes, and calls a command. The ```run``` command
+destorys the container upon completion, while the ```up/down/execute``
+commands allow to dispatch commands to a keyed container.
+
 ```
 Usage: dr <command> [-p <profile>] [-i <image>] [-n <name>] [-k <key>] <container_commands>
 Commands:
@@ -16,7 +21,7 @@ Options:
   -d: Print command line without executing (dry run)
 ```
 
-## Insallation
+## Installation
 
 1. Run ```make install```.
 
@@ -25,4 +30,22 @@ Options:
 3. Add to the end of /etc/sudoers this line:
 ```ALL	ALL=(ALL) NOPASSWD: /usr/bin/dr```
 
-4. See examples in ```/etc/docker/tools```.
+## Examples
+
+### The execute command
+
+1. Start a container running R
+```sudo dr up -k R -h -i eitanyaffe/r-relman```
+
+2. Execute the script x.r with the R container.
+```sudo dr exec -k R Rscript x.r```
+
+3. Bring down the R container.
+```sudo dr down -k R```
+
+### The run command
+
+Execute the bash script x.sh within an ubuntu container:
+```sudo dr run -i ubuntu x.sh```
+
+See some more examples in ```/etc/docker/tools```.

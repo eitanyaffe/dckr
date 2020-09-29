@@ -1,1 +1,1 @@
-sudo dr up -k R -h -i r_local
+sudo dr up -k R -i r_local

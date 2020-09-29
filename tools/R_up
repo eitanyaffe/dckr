@@ -1,1 +1,1 @@
-sudo dr up -k R -h -i eitanyaffe/r-relman
+sudo dr up -k R -i eitanyaffe/r-relman
