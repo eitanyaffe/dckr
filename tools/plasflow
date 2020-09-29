@@ -1,1 +1,1 @@
-sudo dckr exec -k plasflow PlasFlow.py $@
+sudo dr exec -k plasflow PlasFlow.py $@

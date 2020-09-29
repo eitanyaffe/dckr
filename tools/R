@@ -1,1 +1,1 @@
-sudo dckr exec -k R R $@
+sudo dr exec -k R R $@

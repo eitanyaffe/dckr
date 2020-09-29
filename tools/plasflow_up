@@ -1,1 +1,1 @@
-sudo dckr up -k plasflow -i quay.io/biocontainers/plasflow:1.1.0--py35_0
+sudo dr up -k plasflow -i quay.io/biocontainers/plasflow:1.1.0--py35_0

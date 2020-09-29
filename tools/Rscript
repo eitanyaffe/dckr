@@ -1,1 +1,1 @@
-sudo dckr exec -k R Rscript $@
+sudo dr exec -k R Rscript $@

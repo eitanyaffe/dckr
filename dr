@@ -1,7 +1,7 @@
 #!/bin/sh
 
 DOCKER_PROFILE_DIR=${DOCKER_PROFILE_DIR:-/etc/docker/profiles}
-DOCKER_PROFILE=${DOCKER_PROFILE:-dckr_base}
+DOCKER_PROFILE=${DOCKER_PROFILE:-dr_base}
 
 if [ $# -le 0 ]
 then
@@ -57,7 +57,7 @@ do
 done
 
 echo ==================================================================
-echo "# dckr command:" $COMMAND
+echo "# dr command:" $COMMAND
 
 shift $((OPTIND-1))
 CONTAINER_COMMAND=$@

@@ -1,1 +1,1 @@
-dckr run -i mesosphere/aws-cli -p dckr_biohub_aws $@
+dr run -i mesosphere/aws-cli -p dr_biohub_aws $@
