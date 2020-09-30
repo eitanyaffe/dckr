@@ -1,9 +1,9 @@
 # dr: A docker wrapper
 
 This helper script generates and calls a tailored docker command. It
-customizes the commandf with a user-specified image, mounts
+customizes the command with a user-specified image, mounts
 a set of user-defined volumes, and calls a user-specified command within the
-command. 
+container. 
 
 dr has two workflows. The ```run``` command
 spins up a container, executes a command, and destorys the container upon completion. The ```up/down/execute```
