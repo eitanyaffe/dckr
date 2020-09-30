@@ -32,6 +32,8 @@ COMMAND=$1
 shift
 
 RUSER=${SUDO_USER:-${USER}}
+#RUSER_IDS=$(id -u):$(id -g)
+RUSER_IDS=${SUDO_UID:-${UID}}:${SUDO_GID:-${GID}}
 
 # get nice value of parent
 PRIO_VALUE=$(awk '{print $18}' /proc/$$/stat)
@@ -62,7 +64,7 @@ echo "# dr command:" $COMMAND
 shift $((OPTIND-1))
 CONTAINER_COMMAND=$@
 
-DOCKER_RUN_OPTS="-w /home/${RUSER} -v /etc/passwd:/etc/passwd -v /etc/shadow:/etc/shadow -v /etc/group:/etc/group -u ${RUSER}"
+DOCKER_RUN_OPTS="-w /home/${RUSER} -v /etc/passwd:/etc/passwd -v /etc/shadow:/etc/shadow -v /etc/group:/etc/group -u ${RUSER_IDS}"
 DOCKER_EXEC_OPTS="-it"
 
 # DOCKER_RUN_USER_OPTS can be defined in a profile file
