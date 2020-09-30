@@ -39,20 +39,7 @@ Options:
 3. Add to the end of /etc/sudoers this line:
 ``ALL	ALL=(ALL) NOPASSWD: /usr/bin/dr```
 
-## Profiles
-
-The volumes mounted by docker and other docker parameters are defined
-using the profile parameter. The default profile is ```/etc/docker/profiles/dr_base```, which contains:
-```
-DOCKER_RUN_USER_OPTS="-v /relman01:/relman01 -v /relman02:/relman02 -v /relman03:/relman03 -v /relman04:/relman04 -v /home:/home"
-```
-
-New profiles can be added in the profile directory
-```/etc/docker/profiles/```, and referred to using the -p parameter
-(for a specific dr call), or by setting the environment variable
-DOCKER_PROFILE (to induce a global change).
-
-## dr commands
+## Examples: dr commands
 
 ### The execute command
 
@@ -74,3 +61,16 @@ Execute the bash script x.sh within an ubuntu container:
 
 The ```/etc/docker/tools``` contains bash scripts that serve as
 aliases for dr commands. See files there.
+
+## Profiles
+
+The volumes mounted by docker and other docker parameters are defined
+using the profile parameter. The default profile is ```/etc/docker/profiles/dr_base```, which contains:
+```
+DOCKER_RUN_USER_OPTS="-v /relman01:/relman01 -v /relman02:/relman02 -v /relman03:/relman03 -v /relman04:/relman04 -v /home:/home"
+```
+
+New profiles can be added in the profile directory
+```/etc/docker/profiles/```, and referred to using the -p parameter
+(for a specific dr call), or by setting the environment variable
+DOCKER_PROFILE (to induce a global change).
