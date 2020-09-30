@@ -73,4 +73,4 @@ DOCKER_RUN_USER_OPTS="-v /relman01:/relman01 -v /relman02:/relman02 -v /relman03
 New profiles can be added in the profile directory
 ```/etc/docker/profiles/```, and referred to using the -p parameter
 (for a specific dr call), or by setting the environment variable
-DOCKER_PROFILE (to induce a global change).
+DOCKER_PROFILE, in order to induce a global change.
