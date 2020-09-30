@@ -1,12 +1,16 @@
 # dr: A docker wrapper
 
-This helper script calls docker in order to spin up a container with a user-specified image, mounting
-user-defined volumes, and calling a specific container command. 
+This helper script generates and calls a tailored docker command. It
+customizes the commandf with a user-specified image, mounts
+a set of user-defined volumes, and calls a user-specified command within the
+command. 
 
-dr has two commands or flavors. The ```run``` command
-destorys the container upon completion of the container command. In the ```up/down/execute```
-workflow the user first spins up a container with a key (```up``` command), calls
-multiple commands using th ```execute``` command, and upon completion shuts down the container
+dr has two workflows. The ```run``` command
+spins up a container, executes a command, and destorys the container upon completion. The ```up/down/execute```
+workflow is designed for cases where we wish to avoid the overhead of
+creating and destroying containers. Here the the user first spins up a
+container with a user-speficied key using the ```up``` command, calls
+multiple commands using th ```execute``` command, and can destroy the container
 using the ```down``` command.
 
 ## Syntax
