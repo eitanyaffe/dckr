@@ -39,7 +39,12 @@ Options:
 3. Add to the end of /etc/sudoers this line:
 ``ALL	ALL=(ALL) NOPASSWD: /usr/bin/dr```
 
-## Examples: dr commands
+## Examples
+
+### The run command
+
+Execute bash within an ubuntu container:
+```sudo dr run -i ubuntu bash```
 
 ### The execute command
 
@@ -51,11 +56,6 @@ Options:
 
 3. Bring down the R container.
 ```sudo dr down -k R```
-
-### The run command
-
-Execute the bash script x.sh within an ubuntu container:
-```sudo dr run -i ubuntu x.sh```
 
 ## Tools
 
