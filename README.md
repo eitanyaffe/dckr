@@ -42,7 +42,7 @@ Options:
 ## Profiles
 
 The volumes mounted by docker and other docker parameters are defined
-using the profile parameter. The default profile is dr_base, which contains:
+using the profile parameter. The default profile is ```/etc/docker/profiles/dr_base```, which contains:
 ```
 DOCKER_RUN_USER_OPTS="-v /relman01:/relman01 -v /relman02:/relman02 -v /relman03:/relman03 -v /relman04:/relman04 -v /home:/home"
 ```
