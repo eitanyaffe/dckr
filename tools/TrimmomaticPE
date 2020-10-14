@@ -1,0 +1,1 @@
+sudo dr run -i biocontainers/trimmomatic:v0.38dfsg-1-deb_cv1 TrimmomaticPE
