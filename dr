@@ -20,6 +20,7 @@ then
     echo "  -n <name>: Specify container name for non-singlton container (default: none)"
     echo "  -d: Print command line without executing (dry run)"
     echo "  -x: Disable pseudo-tty (default: false)"
+    echo "  -y: Disable nice (default: false)"
     exit 1
 fi
 
@@ -41,9 +42,9 @@ PRIO_VALUE=$(awk '{print $18}' /proc/$$/stat)
 NICE_VALUE=$((PRIO_VALUE-20))
 NICE="nice -n ${NICE_VALUE}"
 
-DOCKER_EXEC_OPTS="-it"
+DOCKER_EXEC_OPTS="-it -w $PWD"
 
-while getopts "p:i:k:n:r:dhx" OPT
+while getopts "p:i:k:n:r:dhxyC" OPT
 do
   case $OPT in
     p) PROFILE=$OPTARG
@@ -60,6 +61,10 @@ do
       ;;
     x) DOCKER_EXEC_OPTS="-i"
        ;;
+    y) NICE=""
+       ;;
+    C) break
+       ;;
   esac
 done
 
@@ -69,7 +74,7 @@ echo "# dr command:" $COMMAND
 shift $((OPTIND-1))
 CONTAINER_COMMAND=$@
 
-DOCKER_RUN_OPTS="-w /home/${RUSER} -v /etc/passwd:/etc/passwd -v /etc/shadow:/etc/shadow -v /etc/group:/etc/group -u ${RUSER_IDS}"
+DOCKER_RUN_OPTS="-v /etc/passwd:/etc/passwd -v /etc/shadow:/etc/shadow -v /etc/group:/etc/group -u ${RUSER_IDS}"
 
 # DOCKER_RUN_USER_OPTS can be defined in a profile file
 DOCKER_RUN_USER_OPTS=
